@@ -1,4 +1,4 @@
-<?php
+</**?php
 require_once "core/BaseDatos.php";
 //require_once "entities/; Añadir entidad
 class Model extends Conectar{
@@ -16,7 +16,8 @@ class Model extends Conectar{
             if($resultado){ 
                 //objeto                
                 return //$objeto;
-            }else{
+            }
+            else{
                 return null;
             }
         }catch(Exception $e){

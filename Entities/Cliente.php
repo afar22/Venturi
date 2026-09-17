@@ -1,5 +1,4 @@
 <?php
-
 class Cliente
 {
     public $cliente_id;
@@ -8,8 +7,9 @@ class Cliente
     public $correo;
     public $telefono;
     private $documento;
+    private $tipoDocumento;
 
-    public function __construct($cliente_id, $nombre, $apellido, $correo, $telefono, $documento)
+    public function __construct($cliente_id, $nombre, $apellido, $correo, $telefono, $documento, $tipoDocumento)
     {
         $this->cliente_id = $cliente_id;
         $this->nombre = $nombre;
@@ -17,6 +17,7 @@ class Cliente
         $this->correo = $correo;
         $this->telefono = $telefono;
         $this->documento = $documento;
+        $this->tipoDocumento = $tipoDocumento;
     }
 
     public function getId()
@@ -82,6 +83,17 @@ class Cliente
     public function setDocumento($documento)
     {
         $this->documento = $documento;
+        return $this;
+    }
+
+    public function getTipoDocumento()
+    {
+        return $this->tipoDocumento;
+    }
+
+    public function setTipoDocumento($tipoDocumento)
+    {
+        $this->tipoDocumento = $tipoDocumento;
         return $this;
     }
 }
