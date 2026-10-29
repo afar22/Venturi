@@ -10,7 +10,7 @@ class clienteController {
     }
 
     public function crear(){
-        require_once "View/CrearCliente.php";
+        require_once "View/Cliente/CrearCliente.php";
     }
 
     public function guardar(){

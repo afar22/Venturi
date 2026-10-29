@@ -10,14 +10,14 @@ class citaController {
     }
 
     public function crear(){
-        require_once "Model/FacturaModel.php";
         require_once "Model/OperarioModel.php";
+        require_once "Model/EstufaModel.php";
 
-        $modeloFactura  = new FacturaModel();
         $modeloOperario = new OperarioModel();
+        $modeloEstufa   = new EstufaModel();
 
-        $facturas  = $modeloFactura->obtenerTodasLasFacturas();
         $operarios = $modeloOperario->obtenerTodosLosOperarios();
+        $estufas   = $modeloEstufa->obtenerTodasLasEstufas();
 
         require_once "View/Cita/CrearCita.php";
     }
@@ -32,24 +32,27 @@ class citaController {
         require_once "Entities/Cita.php";
 
         $tipoEstufa  = trim($_POST['tipoEstufa'] ?? '');
-        $facturaFK   = trim($_POST['facturaFK'] ?? '');
         $operarioFK  = trim($_POST['operarioFK'] ?? '');
         $tipoMantFK  = trim($_POST['tipoMantFK'] ?? 1);
         $fecha       = trim($_POST['fecha'] ?? '');
         $descripcion = trim($_POST['descripcion'] ?? '');
 
-        if(empty($tipoEstufa) || empty($facturaFK) || empty($operarioFK) || empty($fecha)){
-            $error = "Todos los campos son obligatorios";
-            require_once "Model/FacturaModel.php";
+        if(empty($operarioFK) || empty($fecha)){
+            $error = "Los campos operario y fecha son obligatorios";
             require_once "Model/OperarioModel.php";
-            $facturas  = (new FacturaModel())->obtenerTodasLasFacturas();
-            $operarios = (new OperarioModel())->obtenerTodosLosOperarios();
+            require_once "Model/EstufaModel.php";
+            $modeloOperario = new OperarioModel();
+            $modeloEstufa   = new EstufaModel();
+            $operarios = $modeloOperario->obtenerTodosLosOperarios();
+            $estufas   = $modeloEstufa->obtenerTodasLasEstufas();
             require_once "View/Cita/CrearCita.php";
             return;
         }
 
+        if(empty($tipoEstufa)) $tipoEstufa = 0; // Sin estufa asignada
+
         $modelo = new CitaModel();
-        $cita = new Cita(null, $tipoEstufa, $facturaFK, $operarioFK, $tipoMantFK);
+        $cita = new Cita(null, $tipoEstufa, $operarioFK, $tipoMantFK);
         $modelo->crearCita($cita, $fecha, $descripcion);
 
         header("Location: " . APP_URL . "index.php?url=cita&accion=lista");

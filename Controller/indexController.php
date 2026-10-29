@@ -3,15 +3,12 @@ class indexController {
 
     public function inicio(){
         require_once "Model/ClienteModel.php";
-        require_once "Model/FacturaModel.php";
         require_once "Model/CitaModel.php";
 
         $modeloCliente = new ClienteModel();
-        $modeloFactura = new FacturaModel();
         $modeloCita    = new CitaModel();
 
         $totalClientes = $modeloCliente->contarClientes();
-        $totalFacturas = $modeloFactura->contarFacturas();
         $totalCitas    = $modeloCita->contarCitas();
         $citasRecientes = $modeloCita->obtenerCitasRecientes();
 

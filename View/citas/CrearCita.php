@@ -9,12 +9,14 @@
         <form action="<?php echo APP_URL; ?>index.php?url=cita&accion=guardar" method="POST">
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <label>Tipo de Estufa</label>
-                    <select class="form-control" name="tipoEstufa" required>
-                        <option value="" disabled selected>Seleccione...</option>
-                        <option value="Residencial">Residencial</option>
-                        <option value="Industrial">Industrial</option>
-                        <option value="Comercial">Comercial</option>
+                    <label>Estufa</label>
+                    <select class="form-control" name="tipoEstufa">
+                        <option value="" selected>Sin estufa asignada</option>
+                        <?php if(!empty($estufas)): foreach($estufas as $e): ?>
+                        <option value="<?php echo $e['nEstufaid']; ?>">
+                            #<?php echo $e['nEstufaid']; ?> - <?php echo htmlspecialchars($e['cMarcaEstufa'] . ' ' . $e['cModelo']); ?>
+                        </option>
+                        <?php endforeach; endif; ?>
                     </select>
                 </div>
                 <div class="form-group col-md-6">
@@ -23,17 +25,6 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label>Factura asociada</label>
-                    <select class="form-control" name="facturaFK" required>
-                        <option value="" disabled selected>Seleccione una factura...</option>
-                        <?php foreach($facturas as $f): ?>
-                        <option value="<?php echo $f['nFacturaid']; ?>">
-                            Factura #<?php echo $f['nFacturaid']; ?> - <?php echo htmlspecialchars($f['cNombres'] . ' ' . $f['cApellidos']); ?> - $<?php echo number_format($f['nTotalPago'], 0, ',', '.'); ?>
-                        </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
                 <div class="form-group col-md-6">
                     <label>Operario</label>
                     <select class="form-control" name="operarioFK" required>

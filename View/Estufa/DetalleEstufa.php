@@ -22,9 +22,9 @@
                         <th>Estado</th>
                         <td>
                             <?php
-                            $estados = [1 => 'Activa', 2 => 'En mantenimiento', 3 => 'Inactiva'];
+                            $estados = [1 => 'Activa', 0 => 'Inactiva'];
                             $estado  = $estufa['nEstadoEstufafk'];
-                            $badge   = $estado == 1 ? 'success' : ($estado == 2 ? 'warning' : 'danger');
+                            $badge   = $estado == 1 ? 'success' : 'danger';
                             ?>
                             <span class="badge badge-<?php echo $badge; ?>">
                                 <?php echo $estados[$estado] ?? 'Desconocido'; ?>

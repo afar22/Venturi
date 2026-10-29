@@ -10,7 +10,7 @@ class EstufaModel extends Conectar {
 
     public function contarEstufas(){
         try{
-            $sql = "SELECT COUNT(*) as total FROM TEstufa";
+            $sql = "SELECT COUNT(*) as total FROM tEstufa";
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
@@ -21,9 +21,18 @@ class EstufaModel extends Conectar {
 
     public function obtenerTodasLasEstufas(){
         try{
-            $sql = "SELECT e.*, c.cNombres, c.cApellidos 
-                    FROM TEstufa e 
-                    LEFT JOIN TCliente c ON e.nClientefk = c.nClienteid";
+            $sql = "SELECT
+                        e.nEstufaID AS nEstufaid,
+                        e.cMarca AS cMarcaEstufa,
+                        e.cModelo,
+                        e.lEstado AS nEstadoEstufafk,
+                        e.cObservaciones AS cInformacionAdicional,
+                        '' AS cTipoEstufa,
+                        e.nClienteFK AS nClientefk,
+                        c.cNombres,
+                        c.cApellidos
+                    FROM tEstufa e
+                    LEFT JOIN tPerfil c ON c.nPerfilID = e.nClienteFK";
             $consulta = $this->conexion->prepare($sql);
             $consulta->execute();
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
@@ -34,7 +43,15 @@ class EstufaModel extends Conectar {
 
     public function obtenerEstufaPorId($id){
         try{
-            $sql = "SELECT * FROM TEstufa WHERE nEstufaid = :id";
+            $sql = "SELECT
+                        nEstufaID AS nEstufaid,
+                        cMarca AS cMarcaEstufa,
+                        cModelo,
+                        lEstado AS nEstadoEstufafk,
+                        cObservaciones AS cInformacionAdicional,
+                        '' AS cTipoEstufa,
+                        nClienteFK AS nClientefk
+                    FROM tEstufa WHERE nEstufaID = :id";
             $sentencia = $this->conexion->prepare($sql);
             $sentencia->bindParam(':id', $id);
             $sentencia->execute();
@@ -58,7 +75,15 @@ class EstufaModel extends Conectar {
 
     public function obtenerEstufasPorCliente($clienteId){
         try{
-            $sql = "SELECT * FROM TEstufa WHERE nClientefk = :clienteId";
+            $sql = "SELECT
+                        nEstufaID AS nEstufaid,
+                        cMarca AS cMarcaEstufa,
+                        cModelo,
+                        lEstado AS nEstadoEstufafk,
+                        cObservaciones AS cInformacionAdicional,
+                        '' AS cTipoEstufa,
+                        nClienteFK AS nClientefk
+                    FROM tEstufa WHERE nClienteFK = :clienteId";
             $sentencia = $this->conexion->prepare($sql);
             $sentencia->bindParam(':clienteId', $clienteId);
             $sentencia->execute();
@@ -83,10 +108,20 @@ class EstufaModel extends Conectar {
 
     public function obtenerDetalle($id){
         try{
-            $sql = "SELECT e.*, c.cNombres, c.cApellidos, c.cCorreo, c.cTelefono
-                    FROM TEstufa e 
-                    LEFT JOIN TCliente c ON e.nClientefk = c.nClienteid
-                    WHERE e.nEstufaid = :id";
+            $sql = "SELECT
+                        e.nEstufaID AS nEstufaid,
+                        e.cMarca AS cMarcaEstufa,
+                        e.cModelo,
+                        e.lEstado AS nEstadoEstufafk,
+                        e.cObservaciones AS cInformacionAdicional,
+                        '' AS cTipoEstufa,
+                        c.cNombres,
+                        c.cApellidos,
+                        c.cCorreo,
+                        '' AS cTelefono
+                    FROM tEstufa e
+                    LEFT JOIN tPerfil c ON c.nPerfilID = e.nClienteFK
+                    WHERE e.nEstufaID = :id";
             $sentencia = $this->conexion->prepare($sql);
             $sentencia->bindParam(':id', $id);
             $sentencia->execute();
@@ -98,15 +133,14 @@ class EstufaModel extends Conectar {
 
     public function crearEstufa(Estufa $estufa){
         try{
-            $sql = "INSERT INTO TEstufa (cTipoEstufa, cModelo, cMarcaEstufa, cInformacionAdicional, nEstadoEstufafk, nClientefk)
-                    VALUES (:tipoEstufa, :modelo, :marca, :informacionAdicional, :estadoEstufafk, :clientefk)";
+            $sql = "INSERT INTO tEstufa (nClienteFK, nTrabajadorFK, cMarca, cModelo, lEstado, cObservaciones)
+                    VALUES (:clientefk, 0, :marca, :modelo, :estadoEstufafk, :informacionAdicional)";
             $sentencia = $this->conexion->prepare($sql);
-            $sentencia->bindValue(':tipoEstufa', $estufa->getTipoEstufa());
-            $sentencia->bindValue(':modelo', $estufa->getModelo());
-            $sentencia->bindValue(':marca', $estufa->getMarca());
-            $sentencia->bindValue(':informacionAdicional', $estufa->getInformacionAdicional());
-            $sentencia->bindValue(':estadoEstufafk', $estufa->getEstadoEstufa_fK());
             $sentencia->bindValue(':clientefk', $estufa->getClientefk());
+            $sentencia->bindValue(':marca', $estufa->getMarca());
+            $sentencia->bindValue(':modelo', $estufa->getModelo());
+            $sentencia->bindValue(':estadoEstufafk', $estufa->getEstadoEstufa_fK());
+            $sentencia->bindValue(':informacionAdicional', $estufa->getInformacionAdicional());
             $sentencia->execute();
             return $this->conexion->lastInsertId();
         }catch(Exception $e){
@@ -116,19 +150,17 @@ class EstufaModel extends Conectar {
 
     public function actualizarEstufa(Estufa $estufa){
         try{
-            $sql = "UPDATE TEstufa 
-                    SET cTipoEstufa=:tipoEstufa, cModelo=:modelo, cMarcaEstufa=:marca,
-                        cInformacionAdicional=:informacionAdicional, nEstadoEstufafk=:estadoEstufafk,
-                        nClientefk=:clientefk
-                    WHERE nEstufaid=:id";
+            $sql = "UPDATE tEstufa
+                    SET nClienteFK=:clientefk, cMarca=:marca, cModelo=:modelo,
+                        lEstado=:estadoEstufafk, cObservaciones=:informacionAdicional
+                    WHERE nEstufaID=:id";
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindValue(':id', $estufa->getId());
-            $stmt->bindValue(':tipoEstufa', $estufa->getTipoEstufa());
-            $stmt->bindValue(':modelo', $estufa->getModelo());
-            $stmt->bindValue(':marca', $estufa->getMarca());
-            $stmt->bindValue(':informacionAdicional', $estufa->getInformacionAdicional());
-            $stmt->bindValue(':estadoEstufafk', $estufa->getEstadoEstufa_fK());
             $stmt->bindValue(':clientefk', $estufa->getClientefk());
+            $stmt->bindValue(':marca', $estufa->getMarca());
+            $stmt->bindValue(':modelo', $estufa->getModelo());
+            $stmt->bindValue(':estadoEstufafk', $estufa->getEstadoEstufa_fK());
+            $stmt->bindValue(':informacionAdicional', $estufa->getInformacionAdicional());
             return $stmt->execute();
         }catch(Exception $e){
             die($e->getMessage());
@@ -137,7 +169,7 @@ class EstufaModel extends Conectar {
 
     public function eliminarEstufa($id){
         try{
-            $sql = "DELETE FROM TEstufa WHERE nEstufaid=:id";
+            $sql = "DELETE FROM tEstufa WHERE nEstufaID=:id";
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindValue(':id', $id);
             return $stmt->execute();

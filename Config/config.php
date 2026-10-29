@@ -10,5 +10,5 @@ define("APP_NAME", "CH4");
 define('DB_SERVIDOR', 'localhost');
 define('DB_USER', 'root');
 define('DB_CLAVE', '');
-define('DB_NOMBRE', 'venturin2');
+define('DB_NOMBRE', 'Venturi_CH4');
 

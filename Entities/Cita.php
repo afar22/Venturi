@@ -4,15 +4,13 @@ class Cita
 {
     public $cita_id;
     public $tipoEstufa;
-    public $factura_Fk;
     public $operario_Fk;
     public $tipoMantenimiento_Fk;
 
-    public function __construct($cita_id, $tipoEstufa, $factura_Fk, $operario_Fk, $tipoMantenimiento_Fk)
+    public function __construct($cita_id, $tipoEstufa, $operario_Fk, $tipoMantenimiento_Fk)
     {
         $this->cita_id = $cita_id;
         $this->tipoEstufa = $tipoEstufa;
-        $this->factura_Fk = $factura_Fk;
         $this->operario_Fk = $operario_Fk;
         $this->tipoMantenimiento_Fk = $tipoMantenimiento_Fk;
     }
@@ -36,17 +34,6 @@ class Cita
     public function setTipoEstufa($tipoEstufa)
     {
         $this->tipoEstufa = $tipoEstufa;
-        return $this;
-    }
-
-    public function getFacturaFk()
-    {
-        return $this->factura_Fk;
-    }
-
-    public function setFacturaFk($factura_Fk)
-    {
-        $this->factura_Fk = $factura_Fk;
         return $this;
     }
 

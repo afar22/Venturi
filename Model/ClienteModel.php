@@ -10,7 +10,7 @@ class ClienteModel extends Conectar {
 
     public function contarClientes(){
         try{
-            $sql = "SELECT COUNT(*) as total FROM TCliente";
+            $sql = "SELECT COUNT(*) as total FROM tPerfil";
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
@@ -21,7 +21,15 @@ class ClienteModel extends Conectar {
 
     public function obtenerTodosLosClientes(){
         try{
-            $sql = "SELECT * FROM TCliente";
+            $sql = "SELECT
+                        nPerfilID AS nClienteid,
+                        cNombres,
+                        cApellidos,
+                        cCorreo,
+                        '' AS cTelefono,
+                        cDocumento,
+                        eTipo_Documento AS cTipoDocumento
+                    FROM tPerfil";
             $consulta = $this->conexion->prepare($sql);
             $consulta->execute();
             $resultados = $consulta->fetchAll(PDO::FETCH_ASSOC);
@@ -45,7 +53,15 @@ class ClienteModel extends Conectar {
 
     public function obtenerClientePorId($id){
         try{
-            $sql = "SELECT * FROM TCliente WHERE nClienteid = :id";
+            $sql = "SELECT
+                        nPerfilID AS nClienteid,
+                        cNombres,
+                        cApellidos,
+                        cCorreo,
+                        '' AS cTelefono,
+                        cDocumento,
+                        eTipo_Documento AS cTipoDocumento
+                    FROM tPerfil WHERE nPerfilID = :id";
             $sentencia = $this->conexion->prepare($sql);
             $sentencia->bindParam(':id', $id);
             $sentencia->execute();
@@ -69,15 +85,14 @@ class ClienteModel extends Conectar {
 
     public function crearCliente(Cliente $cliente){
         try{
-            $sql = "INSERT INTO TCliente (cNombres, cApellidos, cCorreo, cTelefono, cDocumento, cTipoDocumento)
-                    VALUES (:nombre, :apellido, :correo, :telefono, :documento, :tipoDocumento)";
+            $sql = "INSERT INTO tPerfil (nUsuarioFK, cNombres, cApellidos, eTipo_Documento, cDocumento, cCorreo, nExpedicionFK)
+                    VALUES (0, :nombre, :apellido, :tipoDocumento, :documento, :correo, 1)";
             $sentencia = $this->conexion->prepare($sql);
             $sentencia->bindValue(':nombre', $cliente->getNombre());
             $sentencia->bindValue(':apellido', $cliente->getApellido());
-            $sentencia->bindValue(':correo', $cliente->getCorreo());
-            $sentencia->bindValue(':telefono', $cliente->getTelefono());
-            $sentencia->bindValue(':documento', $cliente->getDocumento());
             $sentencia->bindValue(':tipoDocumento', $cliente->getTipoDocumento());
+            $sentencia->bindValue(':documento', $cliente->getDocumento());
+            $sentencia->bindValue(':correo', $cliente->getCorreo());
             $sentencia->execute();
             return $this->conexion->lastInsertId();
         }catch(Exception $e){
@@ -87,16 +102,15 @@ class ClienteModel extends Conectar {
 
     public function actualizarCliente(Cliente $cliente){
         try{
-            $sql = "UPDATE TCliente 
+            $sql = "UPDATE tPerfil
                     SET cNombres=:nombre, cApellidos=:apellido, cCorreo=:correo,
-                        cTelefono=:telefono, cDocumento=:documento, cTipoDocumento=:tipoDocumento
-                    WHERE nClienteid=:id";
+                        cDocumento=:documento, eTipo_Documento=:tipoDocumento
+                    WHERE nPerfilID=:id";
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindValue(':id', $cliente->getId());
             $stmt->bindValue(':nombre', $cliente->getNombre());
             $stmt->bindValue(':apellido', $cliente->getApellido());
             $stmt->bindValue(':correo', $cliente->getCorreo());
-            $stmt->bindValue(':telefono', $cliente->getTelefono());
             $stmt->bindValue(':documento', $cliente->getDocumento());
             $stmt->bindValue(':tipoDocumento', $cliente->getTipoDocumento());
             return $stmt->execute();
@@ -107,7 +121,7 @@ class ClienteModel extends Conectar {
 
     public function eliminarCliente($id){
         try{
-            $sql = "DELETE FROM TCliente WHERE nClienteid=:id";
+            $sql = "DELETE FROM tPerfil WHERE nPerfilID=:id";
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindValue(':id', $id);
             return $stmt->execute();

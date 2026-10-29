@@ -34,9 +34,9 @@
                             <td><?php echo htmlspecialchars($e['cModelo']); ?></td>
                             <td>
                                 <?php
-                                $estados = [1 => 'Activa', 2 => 'En mantenimiento', 3 => 'Inactiva'];
+                                $estados = [1 => 'Activa', 0 => 'Inactiva'];
                                 $estado  = $e['nEstadoEstufafk'];
-                                $badge   = $estado == 1 ? 'success' : ($estado == 2 ? 'warning' : 'danger');
+                                $badge   = $estado == 1 ? 'success' : 'danger';
                                 ?>
                                 <span class="badge badge-<?php echo $badge; ?>">
                                     <?php echo $estados[$estado] ?? 'Desconocido'; ?>
