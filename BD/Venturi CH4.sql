@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS tPerfil (
   eTipo_Documento enum("Cedula de Ciudadania","Cedula de Extranjeria","Otro") default ("Cedula de Ciudadania") not null,
   cDocumento varchar(10) not null,
   cCorreo varchar(55) not null,
+  cTelefono varchar(10),
   nExpedicionFK int not null,
   primary key(nPerfilID)
 ) ENGINE=InnoDB;
@@ -73,6 +74,7 @@ CREATE TABLE IF NOT EXISTS tEstufa (
   nEstufaID int auto_increment not null,
   nClienteFK int not null,
   nTrabajadorFK int not null,
+  cTipoEstufa varchar(30) not null,
   cMarca varchar(10) not null,
   cModelo varchar(10) not null,
   lEstado TINYINT(1) not null default 1,

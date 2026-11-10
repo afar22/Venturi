@@ -19,6 +19,30 @@ class OperarioModel extends Conectar {
         return $this->conexion->lastInsertId();
     }
 
+    private function obtenerCiudadExpedicionId(){
+        $stmt = $this->conexion->prepare("SELECT nCiudadID FROM tCiudad WHERE cCiudad = 'Sin ciudad' LIMIT 1");
+        $stmt->execute();
+        $fila = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($fila) return (int)$fila['nCiudadID'];
+
+        $stmt = $this->conexion->prepare("SELECT nDepartamentoID FROM tDepartamento WHERE cDepartamento = 'Sin departamento' LIMIT 1");
+        $stmt->execute();
+        $departamento = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if(!$departamento){
+            $this->conexion->prepare("INSERT INTO tDepartamento (cDepartamento) VALUES ('Sin departamento')")->execute();
+            $departamentoId = $this->conexion->lastInsertId();
+        } else {
+            $departamentoId = $departamento['nDepartamentoID'];
+        }
+
+        $stmt = $this->conexion->prepare("INSERT INTO tCiudad (cCiudad, nDepartamentoFK) VALUES ('Sin ciudad', :departamentoId)");
+        $stmt->bindValue(':departamentoId', $departamentoId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return (int)$this->conexion->lastInsertId();
+    }
+
     public function obtenerTodosLosOperarios(){
         try{
             $sql = "SELECT
@@ -89,13 +113,16 @@ class OperarioModel extends Conectar {
             $stmt->execute();
             $idUsuario = $this->conexion->lastInsertId();
 
+            $expedicionId = $this->obtenerCiudadExpedicionId();
+
             $stmt = $this->conexion->prepare("INSERT INTO tPerfil (nUsuarioFK, cNombres, cApellidos, eTipo_Documento, cDocumento, cCorreo, nExpedicionFK)
-                                              VALUES (:usuario, :nombre, :apellido, 'Cedula de Ciudadania', :documento, :correo, 1)");
+                                              VALUES (:usuario, :nombre, :apellido, 'Cedula de Ciudadania', :documento, :correo, :expedicion)");
             $stmt->bindValue(':usuario', $idUsuario);
             $stmt->bindValue(':nombre', $operario->getNombre());
             $stmt->bindValue(':apellido', $operario->getApellido());
             $stmt->bindValue(':documento', $operario->getDocumento());
             $stmt->bindValue(':correo', $operario->getCorreo());
+            $stmt->bindValue(':expedicion', $expedicionId, PDO::PARAM_INT);
             $stmt->execute();
 
             return $idUsuario;
@@ -123,6 +150,10 @@ class OperarioModel extends Conectar {
 
     public function eliminarOperario($id){
         try{
+            $stmt = $this->conexion->prepare("DELETE FROM tEstufa WHERE nTrabajadorFK=:id");
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
+
             $stmt = $this->conexion->prepare("DELETE FROM tPerfil WHERE nUsuarioFK=:id");
             $stmt->bindValue(':id', $id);
             $stmt->execute();

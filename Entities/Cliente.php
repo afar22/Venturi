@@ -6,8 +6,9 @@ class Cliente
     public $apellido;
     public $correo;
     public $telefono;
-    private $documento;
     private $tipoDocumento;
+    private $documento;
+    
 
     public function __construct($cliente_id, $nombre, $apellido, $correo, $telefono, $documento, $tipoDocumento)
     {
@@ -16,8 +17,9 @@ class Cliente
         $this->apellido = $apellido;
         $this->correo = $correo;
         $this->telefono = $telefono;
-        $this->documento = $documento;
         $this->tipoDocumento = $tipoDocumento;
+        $this->documento = $documento;
+        
     }
 
     public function getId()
@@ -75,6 +77,18 @@ class Cliente
         return $this;
     }
 
+    
+    public function getTipoDocumento()
+    {
+        return $this->tipoDocumento;
+    }
+
+    public function setTipoDocumento($tipoDocumento)
+    {
+        $this->tipoDocumento = $tipoDocumento;
+        return $this;
+    }
+
     public function getDocumento()
     {
         return $this->documento;
@@ -86,14 +100,4 @@ class Cliente
         return $this;
     }
 
-    public function getTipoDocumento()
-    {
-        return $this->tipoDocumento;
-    }
-
-    public function setTipoDocumento($tipoDocumento)
-    {
-        $this->tipoDocumento = $tipoDocumento;
-        return $this;
-    }
 }

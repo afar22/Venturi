@@ -37,7 +37,7 @@ class estufaController {
             require_once "Model/ClienteModel.php";
             $modeloCliente = new ClienteModel();
             $clientes = $modeloCliente->obtenerTodosLosClientes();
-            require_once "View/CrearEstufa.php";
+            require_once "View/Estufa/CrearEstufa.php";
             return;
         }
 
@@ -65,7 +65,7 @@ class estufaController {
         $modeloCliente = new ClienteModel();
         $clientes = $modeloCliente->obtenerTodosLosClientes();
 
-        require_once "View/EditarEstufa.php";
+        require_once "View/Estufa/EditarEstufa.php";
     }
 
     public function actualizar(){
