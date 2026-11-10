@@ -31,7 +31,7 @@ class clienteController {
 
         if(empty($nombre) || empty($apellido) || empty($correo) || empty($telefono) || empty($documento) || empty($tipoDocumento)){
             $error = "Todos los campos son obligatorios";
-            require_once "View/CrearCliente.php";
+            require_once "View/Cliente/CrearCliente.php";
             return;
         }
 
@@ -55,7 +55,7 @@ class clienteController {
             exit;
         }
 
-        require_once "View/EditarCliente.php";
+        require_once "View/Cliente/EditarCliente.php";
     }
 
     public function actualizar(){

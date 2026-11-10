@@ -25,9 +25,14 @@
                 </thead>
                 <tbody>
                     <?php if(!empty($estufas)): ?>
-                        <?php foreach($estufas as $e): ?>
+                        <?php 
+                            $cont = 0;
+                            foreach($estufas as $e): 
+                                $cont++;
+                                $c = sprintf("%03d", $cont);
+                            ?>
                         <tr>
-                            <td><?php echo $e['nEstufaid']; ?></td>
+                            <td><?php echo $c; ?></td>
                             <td><?php echo htmlspecialchars($e['cNombres'] . ' ' . $e['cApellidos']); ?></td>
                             <td><?php echo htmlspecialchars($e['cTipoEstufa']); ?></td>
                             <td><?php echo htmlspecialchars($e['cMarcaEstufa']); ?></td>

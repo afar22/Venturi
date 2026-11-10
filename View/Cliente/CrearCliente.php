@@ -26,11 +26,20 @@
                     <input type="email" class="form-control" name="correo" placeholder="ejemplo@correo.com" required>
                 </div>
                 <div class="form-group col-md-6">
-                    <label>Teléfono</label>
+                    <label>Telefono</label>
                     <input type="text" class="form-control" name="telefono" placeholder="Ingrese el teléfono" required>
                 </div>
             </div>
             <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Tipo de documento</label>
+                    <select class="form-control" name="tipoDocumento" required>
+                        <option value="">Seleccione tipo</option>
+                        <option value="Cedula de Ciudadania">Cedula de Ciudadania</option>
+                        <option value="Cedula de Extranjeria">Cedula de Extranjeria</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
                 <div class="form-group col-md-6">
                     <label>Documento</label>
                     <input type="text" class="form-control" name="documento" placeholder="Número de documento" required>
@@ -38,7 +47,7 @@
             </div>
             <hr>
             <div class="d-flex justify-content-end">
-                <a href="<?php echo APP_URL; ?>index.php?url=operario&accion=lista" class="btn btn-secondary mr-2"><i class="fas fa-arrow-left fa-sm"></i> Cancelar</a>
+                <a href="<?php echo APP_URL; ?>index.php?url=cliente&accion=lista" class="btn btn-secondary mr-2"><i class="fas fa-arrow-left fa-sm"></i> Cancelar</a>
                 <button type="submit" class="btn btn-primary"><i class="fas fa-save fa-sm"></i> Guardar</button>
             </div>
         </form>

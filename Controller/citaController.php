@@ -19,7 +19,7 @@ class citaController {
         $operarios = $modeloOperario->obtenerTodosLosOperarios();
         $estufas   = $modeloEstufa->obtenerTodasLasEstufas();
 
-        require_once "View/Cita/CrearCita.php";
+        require_once "View/citas/CrearCita.php";
     }
 
     public function guardar(){

@@ -15,6 +15,7 @@
                         <th>Nombres</th>
                         <th>Apellidos</th>
                         <th>Correo</th>
+                        <th>Telefono</th>
                         <th>Tipo Doc.</th>
                         <th>Documento</th>
                         <th class="text-center">Acciones</th>
@@ -22,12 +23,19 @@
                 </thead>
                 <tbody>
                     <?php if(!empty($clientes)): ?>
-                        <?php foreach($clientes as $cli): ?>
+                        <?php 
+                            $cont = 0;
+                            foreach($clientes as $cli):
+                                $cont++;
+                                $c = sprintf("%03d", $cont) 
+                                
+                            ?>
                         <tr>
-                            <td><?php echo $cli->getId(); ?></td>
+                            <td><?php echo $c; ?></td>
                             <td><?php echo htmlspecialchars($cli->getNombre()); ?></td>
                             <td><?php echo htmlspecialchars($cli->getApellido()); ?></td>
                             <td><?php echo htmlspecialchars($cli->getCorreo()); ?></td>
+                            <td><?php echo htmlspecialchars($cli->getTelefono()); ?></td>
                             <td><?php echo htmlspecialchars($cli->getTipoDocumento()); ?></td>
                             <td><?php echo htmlspecialchars($cli->getDocumento()); ?></td>
                             <td class="text-center">
